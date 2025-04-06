@@ -100,4 +100,15 @@ describe.sequential("cli", () => {
       expect(fs.readdirSync(testRoot)).not.toContain(testFileName);
     });
   });
+
+  test("generates expected files", async () => {
+    const { exitCode } = await runTest(
+      [path.join(__dirname, "cli.ts"), "."],
+      [ENTER],
+      { testPath: testRoot }
+    );
+
+    expect(exitCode).toBe(0);
+    expect(fs.readdirSync(testRoot, { recursive: true })).toMatchSnapshot();
+  });
 });
