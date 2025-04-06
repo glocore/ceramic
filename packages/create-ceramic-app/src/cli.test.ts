@@ -109,6 +109,49 @@ describe.sequential("cli", () => {
     );
 
     expect(exitCode).toBe(0);
-    expect(fs.readdirSync(testRoot, { recursive: true })).toMatchSnapshot();
+
+    const files = (
+      fs.readdirSync(testRoot, { recursive: true }) as string[]
+    ).filter((filePath) =>
+      fs.lstatSync(path.join(testRoot, filePath)).isFile()
+    );
+
+    expect(files).toMatchSnapshot();
+
+    for (const filePath of files) {
+      const fileContents = fs
+        .readFileSync(path.join(testRoot, filePath), "utf-8")
+        .toString();
+
+      await expect(fileContents).toMatchFileSnapshot(
+        `./__snapshots__/tempate/${filePath}.snap`
+      );
+    }
+  });
+
+  test("adds the project name in the relevant places", async () => {
+    const projectName = "test-app";
+
+    const { exitCode } = await runTest(
+      [path.join(__dirname, "cli.ts"), projectName],
+      [ENTER],
+      { testPath: testRoot }
+    );
+
+    expect(exitCode).toBe(0);
+
+    expect(
+      fs
+        .readFileSync(path.join(testRoot, projectName, "README.md"), "utf-8")
+        .toString()
+    ).toContain(projectName);
+
+    const pkg = JSON.parse(
+      fs
+        .readFileSync(path.join(testRoot, projectName, "package.json"), "utf-8")
+        .toString()
+    );
+
+    expect(pkg.name).toEqual(projectName);
   });
 });
