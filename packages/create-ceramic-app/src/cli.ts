@@ -26,6 +26,8 @@ async function init() {
       placeholder: "my-ceramic-app",
       defaultValue: "my-ceramic-app",
       validate(dir) {
+        if (!dir) return;
+        
         if (!isValidProjectName(dir)) {
           return "Invalid project name";
         }
@@ -67,7 +69,9 @@ async function init() {
     }
   }
 
-  let projectName = toValidProjectName(path.basename(path.resolve(targetDir)));
+  const projectName = toValidProjectName(
+    path.basename(path.resolve(targetDir))
+  );
 
   const root = path.join(process.cwd(), targetDir);
 
@@ -111,13 +115,15 @@ async function init() {
   pkg.name = projectName;
   write("package.json", JSON.stringify(pkg, null, 2) + "\n");
 
-  const readme = fs.readFileSync(path.join(templateDir, `README.md`), "utf-8");
+  let readme = fs.readFileSync(path.join(templateDir, `README.md`), "utf-8");
 
-  readme.replace("my-ceramic-app", projectName);
+  readme = readme.replace("my-ceramic-app", projectName);
 
   write("README.md", readme);
 
-  prompts.outro(`Ceramic app created at ${String(targetDir)}`);
+  prompts.outro(
+    `Ceramic app created at ${path.basename(path.resolve(targetDir))}`
+  );
 }
 
 function copy(src: string, dest: string) {
