@@ -2,7 +2,9 @@
   "name": "@ceramic/create-ceramic-app",
   "version": "0.0.1",
   "type": "module",
-  "bin": "./dist/cli.mjs",
+  "bin": {
+    "create-ceramic-app": "./dist/cli.mjs"
+  },
   "main": "./dist/cli.mjs",
   "scripts": {
     "dev": "tsx src/cli.ts",
