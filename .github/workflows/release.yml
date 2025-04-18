@@ -28,8 +28,5 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Build
-        run: cd packages/studio && pnpm run publish
+        run: cd packages/studio && pnpm install --frozen-lockfile && pnpm run publish
