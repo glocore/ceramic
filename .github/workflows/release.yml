@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  checks:
+  release:
     runs-on: macos-latest
 
     steps:
@@ -30,3 +30,5 @@ jobs:
 
       - name: Build
         run: cd packages/studio && pnpm install --frozen-lockfile && pnpm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
