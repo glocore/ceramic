@@ -1,2 +1,6 @@
 packages:
   - 'packages/*'
+  - 'packages/studio/renderer'
+
+onlyBuiltDependencies:
+  - electron
