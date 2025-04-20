@@ -31,14 +31,14 @@ const config: ForgeConfig = {
           target: "main",
         },
         {
-          entry: "src/preload.ts",
+          entry: "src/windows/welcome/preload.ts",
           config: "vite.preload.config.ts",
           target: "preload",
         },
       ],
       renderer: [
         {
-          name: "main_window",
+          name: "welcome_window",
           config: "renderer/vite.config.ts",
         },
       ],
