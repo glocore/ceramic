@@ -1,7 +1,7 @@
 {
   "name": "@ceramic-studio/app",
   "productName": "Ceramic Studio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
