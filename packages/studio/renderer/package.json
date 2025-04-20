@@ -1,7 +1,6 @@
 {
   "name": "@ceramic-studio/renderer",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,13 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@remixicon/react": "^4.6.0",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-devtools": "1.116.0",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "tinykeys": "^3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@tailwindcss/vite": "^4.1.4",
     "@tanstack/router-plugin": "1.116.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
@@ -25,6 +27,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "tailwindcss": "^4.1.4",
     "typescript": "catalog:",
     "typescript-eslint": "^8.26.1",
     "vite": "catalog:"
