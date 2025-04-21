@@ -12,9 +12,11 @@
     "@remixicon/react": "^4.6.0",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-devtools": "1.116.0",
+    "clsx": "^2.1.1",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "tinykeys": "^3.0.0"
+    "tailwind-merge": "^3.2.0",
+    "tinykeys": "3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

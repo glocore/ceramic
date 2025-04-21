@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+* {
+  user-select: none;
+}
+
+::selection {
+  color: #000000;
+  background-color: #9bffe1;
+}
+
 button {
   -webkit-app-region: no-drag;
 }
+

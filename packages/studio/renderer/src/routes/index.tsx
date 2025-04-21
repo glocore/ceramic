@@ -5,17 +5,14 @@ import {
   RiFolder2Line,
 } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import pkg from "../../../package.json";
+import { cn } from "../utils";
 import icon from "/icon.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
-
-const closeWindow = () => {
-  window.electronApi.closeWindow();
-};
 
 function Index() {
   useEffect(() => {
@@ -27,17 +24,16 @@ function Index() {
   return (
     <div className="flex flex-row h-screen w-screen">
       <div className="flex flex-col items-center justify-center gap-8 basis-3/5 bg-white [-webkit-app-region:_drag]">
-        <button
-          onClick={closeWindow}
-          className="absolute top-3 start-3 bg-[#bcbcbc] active:bg-[#acabab] hover:bg-[#929292] rounded-full w-4 h-4 flex items-center justify-center"
-        >
-          <RiCloseLine className="w-3 text-white" />
-        </button>
+        <CloseButton className="absolute top-3 start-3" />
         <div className="flex flex-col gap-2 items-center">
           <img src={icon} className="h-30 w-30" />
-          <div className="flex flex-col  items-center">
+          <div className="flex flex-col items-center">
             <h1 className="text-4xl font-semibold">Ceramic Studio</h1>
-            <span className="text-neutral-500">Version {pkg.version}</span>
+            <div className="[-webkit-app-region:_no-drag] select-text! flex justify-center w-full">
+              <span className="text-neutral-500 select-text!">
+                Version {pkg.version}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -60,3 +56,28 @@ function Index() {
     </div>
   );
 }
+
+const CloseButton = ({
+  className,
+  ...delegated
+}: React.ComponentProps<"button">) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={closeWindow}
+      className={cn(
+        "bg-[#bcbcbc] active:bg-[#acabab] hover:bg-[#929292] rounded-full w-4 h-4 flex items-center justify-center",
+        className
+      )}
+      {...delegated}
+    >
+      <RiCloseLine className="w-3 text-white" />
+    </button>
+  );
+};
+
+const closeWindow = () => {
+  window.electronApi.closeWindow();
+};
