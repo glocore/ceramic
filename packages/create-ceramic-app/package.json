@@ -5,10 +5,10 @@
   "bin": {
     "create-ceramic-app": "./dist/cli.mjs"
   },
-  "main": "./dist/cli.mjs",
+  "main": "./dist/cli.cjs",
   "scripts": {
     "dev": "tsx src/cli.ts",
-    "build": "pkgroll",
+    "build": "tsup",
     "test": "vitest"
   },
   "license": "MIT",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "cli-prompts-test": "^0.3.0",
-    "pkgroll": "^2.12.1",
+    "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "vitest": "^3.1.1"
   }

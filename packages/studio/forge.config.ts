@@ -35,10 +35,15 @@ const config: ForgeConfig = {
           config: "vite.preload.config.ts",
           target: "preload",
         },
+        {
+          entry: "src/windows/ide/preload.ts",
+          config: "vite.preload.config.ts",
+          target: "preload",
+        },
       ],
       renderer: [
         {
-          name: "welcome_window",
+          name: "renderer",
           config: "renderer/vite.config.ts",
         },
       ],

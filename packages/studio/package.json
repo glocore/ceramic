@@ -30,12 +30,13 @@
     "@types/electron-squirrel-startup": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "electron": "35.1.5",
+    "electron": "36.1.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
     "ts-node": "^10.0.0",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"

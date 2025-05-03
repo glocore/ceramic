@@ -124,7 +124,7 @@ describe.sequential("cli", () => {
         .toString();
 
       await expect(fileContents).toMatchFileSnapshot(
-        `./__snapshots__/tempate/${filePath}.snap`
+        `./__snapshots__/template/${filePath}.snap`
       );
     }
   });

@@ -10,16 +10,23 @@ import pkg from "../../../package.json";
 import { cn } from "../utils";
 import icon from "/icon.png";
 
-export const Route = createFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute("/welcome")({
+  component: WelcomePage,
 });
 
-function Index() {
+function WelcomePage() {
   useEffect(() => {
     requestAnimationFrame(() => {
-      window.electronApi.initialRenderComplete();
+      window.electronApi?.initialRenderComplete();
     });
   }, []);
+
+  const navigate = Route.useNavigate();
+
+  const createNewProject = async () => {
+    await window.electronApi.requestNewProjectTargetDir();
+    navigate({ to: "/new-project" });
+  };
 
   return (
     <div className="flex flex-row h-screen w-screen">
@@ -38,7 +45,10 @@ function Index() {
         </div>
 
         <div className="flex flex-col w-full max-w-80 gap-2.5">
-          <button className="bg-[#f1f1f1] active:bg-[#e7e6e6] rounded-lg p-2 flex flex-row items-center gap-2 flex-1 font-medium text-sm">
+          <button
+            className="bg-[#f1f1f1] active:bg-[#e7e6e6] rounded-lg p-2 flex flex-row items-center gap-2 flex-1 font-medium text-sm"
+            onClick={createNewProject}
+          >
             <RiAddBoxLine className="text-neutral-500 w-5" />
             Create New Project...
           </button>

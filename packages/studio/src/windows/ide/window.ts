@@ -1,0 +1,47 @@
+import { BrowserWindow } from "electron";
+import path from "node:path";
+import url from "node:url";
+import { closeWindow } from "../../utils";
+
+declare const RENDERER_VITE_DEV_SERVER_URL: string;
+declare const RENDERER_VITE_NAME: string;
+
+let ideWindow: BrowserWindow;
+
+export const createIdeWindow = (options: { projectPath: string }) => {
+  ideWindow = new BrowserWindow({
+    frame: false,
+    show: false,
+    paintWhenInitiallyHidden: true,
+    title: path.basename(options.projectPath),
+
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  // and load the index.html of the app.
+  if (RENDERER_VITE_DEV_SERVER_URL) {
+    ideWindow.loadURL(`${RENDERER_VITE_DEV_SERVER_URL}/ide`);
+  } else {
+    ideWindow.loadURL(
+      url.format({
+        protocol: "file",
+        slashes: true,
+        pathname: path.join(
+          __dirname,
+          `../renderer/${RENDERER_VITE_NAME}/index.html`
+        ),
+      })
+    );
+  }
+
+  // prevent the html <title> from updating the window title (shown in the window picker for example)
+  ideWindow.on("page-title-updated", (e) => e.preventDefault());
+
+  ideWindow.webContents.ipc.on("initial-render-complete", () => {
+    ideWindow?.show();
+  });
+
+  ideWindow.webContents.ipc.on("close-window", () => closeWindow(ideWindow));
+};
