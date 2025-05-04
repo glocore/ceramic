@@ -9,12 +9,24 @@ import { useEffect, useRef } from "react";
 import pkg from "../../../package.json";
 import { cn } from "../utils";
 import icon from "/icon.png";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/welcome")({
   component: WelcomePage,
+  loader({ context: { queryClient } }) {
+    return queryClient.ensureQueryData(recentProjectsQueryOptions);
+  },
 });
 
 function WelcomePage() {
+  const recentProjectsQuery = useSuspenseQuery(recentProjectsQueryOptions);
+
+  const recentProjects = [] as { name: string; path: string }[];
+
+  recentProjectsQuery.data.forEach((projectName, projectPath) =>
+    recentProjects.push({ name: projectName, path: projectPath })
+  );
+
   useEffect(() => {
     requestAnimationFrame(() => {
       window.electronApi?.initialRenderComplete();
@@ -62,7 +74,14 @@ function WelcomePage() {
           </button>
         </div>
       </div>
-      <div className="flex-1 bg-[#e4e4e4]" />
+      <div className="flex-1 bg-[#e4e4e4]">
+        {recentProjects.map((project) => (
+          <div>
+            <p>{project.name}</p>
+            <p>{project.path}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -91,3 +110,8 @@ const CloseButton = ({
 const closeWindow = () => {
   window.electronApi.closeWindow();
 };
+
+const recentProjectsQueryOptions = queryOptions<Map<string, string>>({
+  queryKey: ["recent-projects"],
+  queryFn: window.electronApi.getRecentProjects,
+});

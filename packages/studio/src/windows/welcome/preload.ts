@@ -7,6 +7,7 @@ const electronApi = {
     ipcRenderer.invoke("create-new-project", options),
   requestNewProjectTargetDir: () =>
     ipcRenderer.invoke("request-new-project-target-dir"),
+  getRecentProjects: () => ipcRenderer.invoke("get-recent-projects"),
 } as const;
 
 contextBridge.exposeInMainWorld("electronApi", electronApi);

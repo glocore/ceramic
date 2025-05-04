@@ -1,3 +1,7 @@
+import log from "electron-log/main";
+
+log.errorHandler.startCatching({ showDialog: false });
+
 import { app, BrowserWindow } from "electron";
 import started from "electron-squirrel-startup";
 import { createWelcomeWindow } from "./windows/welcome/window";
