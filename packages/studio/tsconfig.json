@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "strict": true,
     "module": "NodeNext",
     "allowJs": true,
     "skipLibCheck": true,

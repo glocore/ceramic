@@ -10,6 +10,7 @@ import pkg from "../../../package.json";
 import { cn } from "../utils";
 import icon from "/icon.png";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { invariant } from "@ceramic/common";
 
 export const Route = createFileRoute("/welcome")({
   component: WelcomePage,
@@ -18,10 +19,12 @@ export const Route = createFileRoute("/welcome")({
   },
 });
 
+type Project = { name: string; path: string };
+
 function WelcomePage() {
   const recentProjectsQuery = useSuspenseQuery(recentProjectsQueryOptions);
 
-  const recentProjects = [] as { name: string; path: string }[];
+  const recentProjects = [] as Project[];
 
   recentProjectsQuery.data.forEach((projectName, projectPath) =>
     recentProjects.push({ name: projectName, path: projectPath })
@@ -36,8 +39,15 @@ function WelcomePage() {
   const navigate = Route.useNavigate();
 
   const createNewProject = async () => {
-    await window.electronApi.requestNewProjectTargetDir();
-    navigate({ to: "/new-project" });
+    const targetDir = await window.electronApi?.requestNewProjectTargetDir();
+
+    invariant(typeof targetDir === "string");
+
+    navigate({ to: "/new-project", search: { projectPath: targetDir } });
+  };
+
+  const handleRecentProjectClick = (project: Project) => {
+    window.electronApi?.openProject({ project });
   };
 
   return (
@@ -76,10 +86,10 @@ function WelcomePage() {
       </div>
       <div className="flex-1 bg-[#e4e4e4]">
         {recentProjects.map((project) => (
-          <div>
+          <button onClick={() => handleRecentProjectClick(project)}>
             <p>{project.name}</p>
             <p>{project.path}</p>
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -108,10 +118,10 @@ const CloseButton = ({
 };
 
 const closeWindow = () => {
-  window.electronApi.closeWindow();
+  window.electronApi?.closeWindow();
 };
 
 const recentProjectsQueryOptions = queryOptions<Map<string, string>>({
   queryKey: ["recent-projects"],
-  queryFn: window.electronApi.getRecentProjects,
+  queryFn: window.electronApi?.getRecentProjects,
 });

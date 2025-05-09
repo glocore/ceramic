@@ -3,15 +3,22 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/new-project")({
   component: RouteComponent,
+  validateSearch: (
+    search: Record<string, unknown>
+  ): { projectPath: string } => ({ projectPath: search.projectPath as string }),
 });
 
 function RouteComponent() {
+  const { projectPath } = Route.useSearch();
   const form = useForm({
     defaultValues: {
       projectName: "",
     },
     onSubmit: ({ value }) => {
-      window.electronApi.createNewProject({ projectName: value.projectName });
+      window.electronApi?.createNewProject({
+        projectName: value.projectName,
+        projectPath,
+      });
     },
   });
 

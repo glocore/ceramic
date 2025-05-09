@@ -1,19 +1,23 @@
 import { BrowserWindow } from "electron";
 import path from "node:path";
 import url from "node:url";
-import { closeWindow } from "../../utils";
+import { closeWindow } from "src/window";
 
 declare const RENDERER_VITE_DEV_SERVER_URL: string;
 declare const RENDERER_VITE_NAME: string;
 
 let ideWindow: BrowserWindow;
 
-export const createIdeWindow = (options: { projectPath: string }) => {
+export const createIdeWindow = ({
+  project,
+}: {
+  project: { name: string; path: string };
+}) => {
   ideWindow = new BrowserWindow({
     frame: false,
     show: false,
     paintWhenInitiallyHidden: true,
-    title: path.basename(options.projectPath),
+    title: path.basename(project.path),
 
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -43,5 +47,5 @@ export const createIdeWindow = (options: { projectPath: string }) => {
     ideWindow?.show();
   });
 
-  ideWindow.webContents.ipc.on("close-window", () => closeWindow(ideWindow));
+  ideWindow.webContents.ipc.on("close-window", () => closeWindow("ide"));
 };

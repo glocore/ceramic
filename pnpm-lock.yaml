@@ -33,6 +33,8 @@ importers:
         specifier: link:packages/create-ceramic-app
         version: link:packages/create-ceramic-app
 
+  packages/common: {}
+
   packages/create-ceramic-app:
     dependencies:
       '@clack/prompts':
@@ -57,6 +59,9 @@ importers:
 
   packages/studio:
     dependencies:
+      '@ceramic/common':
+        specifier: workspace:*
+        version: link:../common
       electron-log:
         specifier: ^5.4.0
         version: 5.4.0

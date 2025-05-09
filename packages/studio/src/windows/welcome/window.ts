@@ -4,16 +4,15 @@ import path from "node:path";
 import url from "node:url";
 import { createCeramicApp } from "src/createCeramicApp";
 import { store } from "src/store";
-import { closeWindow } from "../../utils";
 import { createIdeWindow } from "../ide/window";
+import { closeWindow, windows } from "src/window";
+import { invariant } from "@ceramic/common";
 
 declare const RENDERER_VITE_DEV_SERVER_URL: string;
 declare const RENDERER_VITE_NAME: string;
 
-let welcomeWindow: BrowserWindow | undefined;
-
 export const createWelcomeWindow = () => {
-  welcomeWindow = new BrowserWindow({
+  const welcomeWindow = new BrowserWindow({
     width: 742,
     height: 462,
     frame: false,
@@ -29,6 +28,8 @@ export const createWelcomeWindow = () => {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  windows.set("welcome", welcomeWindow);
 
   // and load the index.html of the app.
   if (RENDERER_VITE_DEV_SERVER_URL) {
@@ -79,7 +80,7 @@ export const createWelcomeWindow = () => {
   });
 
   welcomeWindow.webContents.ipc.on("close-window", () =>
-    closeWindow(welcomeWindow)
+    closeWindow("welcome")
   );
 
   welcomeWindow.webContents.ipc.handle("get-recent-projects", () => {
@@ -99,27 +100,35 @@ export const createWelcomeWindow = () => {
   });
 };
 
-let newProjectTargetDir: string;
-
 ipcMain.handle("request-new-project-target-dir", async () => {
-  const result = await dialog.showOpenDialog(welcomeWindow, {
+  const window = windows.get("welcome");
+
+  invariant(!!window);
+
+  const result = await dialog.showOpenDialog(window, {
     title: "Select destination",
     properties: ["openDirectory"],
   });
 
   if (result.canceled) return;
 
-  newProjectTargetDir = result.filePaths[0] as string | undefined;
+  const newProjectTargetDir = result.filePaths[0] as string | undefined;
 
   return newProjectTargetDir;
 });
 
 ipcMain.handle(
   "create-new-project",
-  (e, { projectName }: { projectName: string }) => {
+  (
+    e,
+    {
+      projectName,
+      projectPath: targetDir,
+    }: { projectName: string; projectPath: string }
+  ) => {
     const projectPath = createCeramicApp({
       projectName,
-      targetDir: newProjectTargetDir,
+      targetDir,
     });
 
     const recents = store.get("recents", []);
@@ -127,8 +136,8 @@ ipcMain.handle(
 
     store.set("recents", recents);
 
-    welcomeWindow.close();
+    closeWindow("welcome");
 
-    createIdeWindow({ projectPath });
+    createIdeWindow({ project: { name: projectName, path: projectPath } });
   }
 );

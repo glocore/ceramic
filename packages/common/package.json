@@ -1,0 +1,7 @@
+{
+  "name": "@ceramic/common",
+  "private": true,
+  "description": "",
+  "main": "src/index.ts",
+  "packageManager": "pnpm@10.7.1"
+}

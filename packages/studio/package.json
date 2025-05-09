@@ -38,6 +38,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
+    "@ceramic/common": "workspace:*",
     "electron-log": "^5.4.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "10.0.1"
