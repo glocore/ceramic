@@ -11,27 +11,27 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as WelcomeImport } from './routes/welcome'
-import { Route as NewProjectImport } from './routes/new-project'
-import { Route as IdeImport } from './routes/ide'
+import { Route as WelcomeIndexImport } from './routes/welcome/index'
+import { Route as IdeIndexImport } from './routes/ide/index'
+import { Route as WelcomeNewProjectImport } from './routes/welcome/new-project'
 
 // Create/Update Routes
 
-const WelcomeRoute = WelcomeImport.update({
-  id: '/welcome',
-  path: '/welcome',
+const WelcomeIndexRoute = WelcomeIndexImport.update({
+  id: '/welcome/',
+  path: '/welcome/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const NewProjectRoute = NewProjectImport.update({
-  id: '/new-project',
-  path: '/new-project',
+const IdeIndexRoute = IdeIndexImport.update({
+  id: '/ide/',
+  path: '/ide/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IdeRoute = IdeImport.update({
-  id: '/ide',
-  path: '/ide',
+const WelcomeNewProjectRoute = WelcomeNewProjectImport.update({
+  id: '/welcome/new-project',
+  path: '/welcome/new-project',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,25 +39,25 @@ const IdeRoute = IdeImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/ide': {
-      id: '/ide'
+    '/welcome/new-project': {
+      id: '/welcome/new-project'
+      path: '/welcome/new-project'
+      fullPath: '/welcome/new-project'
+      preLoaderRoute: typeof WelcomeNewProjectImport
+      parentRoute: typeof rootRoute
+    }
+    '/ide/': {
+      id: '/ide/'
       path: '/ide'
       fullPath: '/ide'
-      preLoaderRoute: typeof IdeImport
+      preLoaderRoute: typeof IdeIndexImport
       parentRoute: typeof rootRoute
     }
-    '/new-project': {
-      id: '/new-project'
-      path: '/new-project'
-      fullPath: '/new-project'
-      preLoaderRoute: typeof NewProjectImport
-      parentRoute: typeof rootRoute
-    }
-    '/welcome': {
-      id: '/welcome'
+    '/welcome/': {
+      id: '/welcome/'
       path: '/welcome'
       fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeImport
+      preLoaderRoute: typeof WelcomeIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -66,43 +66,43 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/ide': typeof IdeRoute
-  '/new-project': typeof NewProjectRoute
-  '/welcome': typeof WelcomeRoute
+  '/welcome/new-project': typeof WelcomeNewProjectRoute
+  '/ide': typeof IdeIndexRoute
+  '/welcome': typeof WelcomeIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/ide': typeof IdeRoute
-  '/new-project': typeof NewProjectRoute
-  '/welcome': typeof WelcomeRoute
+  '/welcome/new-project': typeof WelcomeNewProjectRoute
+  '/ide': typeof IdeIndexRoute
+  '/welcome': typeof WelcomeIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/ide': typeof IdeRoute
-  '/new-project': typeof NewProjectRoute
-  '/welcome': typeof WelcomeRoute
+  '/welcome/new-project': typeof WelcomeNewProjectRoute
+  '/ide/': typeof IdeIndexRoute
+  '/welcome/': typeof WelcomeIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/ide' | '/new-project' | '/welcome'
+  fullPaths: '/welcome/new-project' | '/ide' | '/welcome'
   fileRoutesByTo: FileRoutesByTo
-  to: '/ide' | '/new-project' | '/welcome'
-  id: '__root__' | '/ide' | '/new-project' | '/welcome'
+  to: '/welcome/new-project' | '/ide' | '/welcome'
+  id: '__root__' | '/welcome/new-project' | '/ide/' | '/welcome/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IdeRoute: typeof IdeRoute
-  NewProjectRoute: typeof NewProjectRoute
-  WelcomeRoute: typeof WelcomeRoute
+  WelcomeNewProjectRoute: typeof WelcomeNewProjectRoute
+  IdeIndexRoute: typeof IdeIndexRoute
+  WelcomeIndexRoute: typeof WelcomeIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IdeRoute: IdeRoute,
-  NewProjectRoute: NewProjectRoute,
-  WelcomeRoute: WelcomeRoute,
+  WelcomeNewProjectRoute: WelcomeNewProjectRoute,
+  IdeIndexRoute: IdeIndexRoute,
+  WelcomeIndexRoute: WelcomeIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -115,19 +115,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/ide",
-        "/new-project",
-        "/welcome"
+        "/welcome/new-project",
+        "/ide/",
+        "/welcome/"
       ]
     },
-    "/ide": {
-      "filePath": "ide.tsx"
+    "/welcome/new-project": {
+      "filePath": "welcome/new-project.tsx"
     },
-    "/new-project": {
-      "filePath": "new-project.tsx"
+    "/ide/": {
+      "filePath": "ide/index.tsx"
     },
-    "/welcome": {
-      "filePath": "welcome.tsx"
+    "/welcome/": {
+      "filePath": "welcome/index.tsx"
     }
   }
 }

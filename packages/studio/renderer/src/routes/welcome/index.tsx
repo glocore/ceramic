@@ -6,13 +6,13 @@ import {
 } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import pkg from "../../../package.json";
-import { cn } from "../utils";
+import pkg from "../../../../package.json";
 import icon from "/icon.png";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { invariant } from "@ceramic/common";
+import { cn } from "src/utils";
 
-export const Route = createFileRoute("/welcome")({
+export const Route = createFileRoute("/welcome/")({
   component: WelcomePage,
   loader({ context: { queryClient } }) {
     return queryClient.ensureQueryData(recentProjectsQueryOptions);
@@ -43,7 +43,10 @@ function WelcomePage() {
 
     invariant(typeof targetDir === "string");
 
-    navigate({ to: "/new-project", search: { projectPath: targetDir } });
+    navigate({
+      to: "/welcome/new-project",
+      search: { projectPath: targetDir },
+    });
   };
 
   const handleRecentProjectClick = (project: Project) => {

@@ -1,4 +1,4 @@
-import type { ElectronApi } from "../src/windows/welcome/preload";
+import type { ElectronApi } from "../../src/preload";
 
 declare global {
   interface Window {

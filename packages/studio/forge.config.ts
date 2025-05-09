@@ -31,12 +31,7 @@ const config: ForgeConfig = {
           target: "main",
         },
         {
-          entry: "src/windows/welcome/preload.ts",
-          config: "vite.preload.config.ts",
-          target: "preload",
-        },
-        {
-          entry: "src/windows/ide/preload.ts",
+          entry: "src/preload.ts",
           config: "vite.preload.config.ts",
           target: "preload",
         },

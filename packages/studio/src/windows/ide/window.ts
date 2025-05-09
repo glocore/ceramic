@@ -2,6 +2,7 @@ import { BrowserWindow } from "electron";
 import path from "node:path";
 import url from "node:url";
 import { closeWindow } from "src/window";
+import { getFiles } from "./files";
 
 declare const RENDERER_VITE_DEV_SERVER_URL: string;
 declare const RENDERER_VITE_NAME: string;
@@ -15,7 +16,7 @@ export const createIdeWindow = ({
 }) => {
   ideWindow = new BrowserWindow({
     frame: false,
-    show: false,
+    // show: false,
     paintWhenInitiallyHidden: true,
     title: path.basename(project.path),
 
@@ -39,6 +40,10 @@ export const createIdeWindow = ({
       })
     );
   }
+
+  ideWindow.webContents.ipc.handle("get-project-files", () =>
+    getFiles({ path: project.path })
+  );
 
   // prevent the html <title> from updating the window title (shown in the window picker for example)
   ideWindow.on("page-title-updated", (e) => e.preventDefault());

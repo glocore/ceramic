@@ -1,7 +1,7 @@
 import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/new-project")({
+export const Route = createFileRoute("/welcome/new-project")({
   component: RouteComponent,
   validateSearch: (
     search: Record<string, unknown>
