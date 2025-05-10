@@ -1,18 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const createCeramicApp = (options: {
+export const createCeramicApp = (props: {
   targetDir: string;
   projectName: string;
+  projectIdentifier: string;
 }) => {
-  if (!isValidProjectName(options.projectName)) {
-    throw new Error(`Invalid projectName received: ${options.projectName}`);
-  }
+  const targetDir = props.targetDir;
 
-  const targetDir = options.targetDir;
-  const projectName = toValidProjectName(options.projectName);
-
-  const root = path.join(targetDir, projectName);
+  const root = path.join(targetDir, props.projectIdentifier);
 
   fs.mkdirSync(root, { recursive: true });
 
@@ -45,12 +41,12 @@ export const createCeramicApp = (options: {
     fs.readFileSync(path.join(templateDir, `package.json`), "utf-8")
   );
 
-  pkg.name = projectName;
+  pkg.name = props.projectIdentifier;
   write("package.json", JSON.stringify(pkg, null, 2) + "\n");
 
   let readme = fs.readFileSync(path.join(templateDir, `README.md`), "utf-8");
 
-  readme = readme.replace("my-ceramic-app", projectName);
+  readme = readme.replace("my-ceramic-app", props.projectName);
 
   write("README.md", readme);
 
@@ -79,13 +75,4 @@ function copyDir(srcDir: string, destDir: string) {
     const destFile = path.resolve(destDir, file);
     copy(srcFile, destFile);
   }
-}
-
-function toValidProjectName(projectName: string) {
-  return projectName
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/^[._]/, "")
-    .replace(/[^a-z\d\-~]+/g, "-");
 }

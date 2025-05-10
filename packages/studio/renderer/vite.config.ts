@@ -23,4 +23,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    force: true,
+    exclude: ["@ceramic/common"],
+  },
+  define: {
+    "import.meta.vitest": undefined,
+  },
 });

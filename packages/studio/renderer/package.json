@@ -16,6 +16,8 @@
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-devtools": "1.116.0",
     "clsx": "^2.1.1",
+    "dexie": "^4.0.11",
+    "dexie-react-hooks": "^1.1.7",
     "react": "catalog:",
     "react-aria-components": "^1.8.0",
     "react-dom": "catalog:",

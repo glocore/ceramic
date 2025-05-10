@@ -9,11 +9,7 @@ declare const RENDERER_VITE_NAME: string;
 
 let ideWindow: BrowserWindow;
 
-export const createIdeWindow = ({
-  project,
-}: {
-  project: { name: string; path: string };
-}) => {
+export const createIdeWindow = ({ project }: { project: { path: string } }) => {
   ideWindow = new BrowserWindow({
     frame: false,
     show: false,

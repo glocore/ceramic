@@ -3,5 +3,11 @@
   "private": true,
   "description": "",
   "main": "src/index.ts",
-  "packageManager": "pnpm@10.7.1"
+  "packageManager": "pnpm@10.7.1",
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "catalog:"
+  }
 }

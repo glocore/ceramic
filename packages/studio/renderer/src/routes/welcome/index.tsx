@@ -1,3 +1,4 @@
+import { invariant } from "@ceramic/common";
 import {
   RiAddBoxLine,
   RiCloseLine,
@@ -5,30 +6,21 @@ import {
   RiFolder2Line,
 } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useRef } from "react";
+import { db } from "src/db";
+import { cn } from "src/utils";
 import pkg from "../../../../package.json";
 import icon from "/icon.png";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { invariant } from "@ceramic/common";
-import { cn } from "src/utils";
 
 export const Route = createFileRoute("/welcome/")({
   component: WelcomePage,
-  loader({ context: { queryClient } }) {
-    return queryClient.ensureQueryData(recentProjectsQueryOptions);
-  },
 });
 
 type Project = { name: string; path: string };
 
 function WelcomePage() {
-  const recentProjectsQuery = useSuspenseQuery(recentProjectsQueryOptions);
-
-  const recentProjects = [] as Project[];
-
-  recentProjectsQuery.data.forEach((projectName, projectPath) =>
-    recentProjects.push({ name: projectName, path: projectPath })
-  );
+  const recentProjects = useLiveQuery(() => db.recentProjects.toArray()) ?? [];
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -55,13 +47,13 @@ function WelcomePage() {
 
   return (
     <div className="flex flex-row h-screen w-screen">
-      <div className="flex flex-col items-center justify-center gap-8 basis-3/5 bg-white [-webkit-app-region:_drag]">
+      <div className="flex flex-col items-center justify-center gap-8 basis-3/5 bg-white window-drag">
         <CloseButton className="absolute top-3 start-3" />
         <div className="flex flex-col gap-2 items-center">
           <img src={icon} className="h-30 w-30" />
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-semibold">Ceramic Studio</h1>
-            <div className="[-webkit-app-region:_no-drag] select-text! flex justify-center w-full">
+            <div className="!window-drag select-text! flex justify-center w-full">
               <span className="text-neutral-500 select-text!">
                 Version {pkg.version}
               </span>
@@ -123,8 +115,3 @@ const CloseButton = ({
 const closeWindow = () => {
   window.electronApi?.closeWindow();
 };
-
-const recentProjectsQueryOptions = queryOptions<Map<string, string>>({
-  queryKey: ["recent-projects"],
-  queryFn: window.electronApi?.getRecentProjects,
-});

@@ -38,8 +38,6 @@ function RouteComponent() {
     projectFilesQueryOptions({ path: projectPath })
   );
 
-  console.log(projectFiles);
-
   return (
     <Tree items={projectFiles} aria-label="File tree">
       {function renderItem({ name, children }) {

@@ -7,6 +7,7 @@ import started from "electron-squirrel-startup";
 import { createWelcomeWindow } from "./windows/welcome/window";
 import { closeWindow } from "./window";
 import { createIdeWindow } from "./windows/ide/window";
+import { createCeramicApp } from "./createCeramicApp";
 
 if (started) {
   app.quit();
@@ -28,8 +29,28 @@ app.on("activate", () => {
 
 ipcMain.handle(
   "open-project",
-  (_, { project }: { project: { name: string; path: string } }) => {
+  (_, { project }: { project: { path: string } }) => {
     closeWindow("welcome");
     createIdeWindow({ project });
+  }
+);
+
+ipcMain.handle(
+  "create-new-project",
+  (
+    e,
+    {
+      projectName,
+      projectIdentifier,
+      projectPath: targetDir,
+    }: { projectName: string; projectIdentifier: string; projectPath: string }
+  ) => {
+    const projectPath = createCeramicApp({
+      projectName,
+      projectIdentifier,
+      targetDir,
+    });
+
+    return projectPath;
   }
 );

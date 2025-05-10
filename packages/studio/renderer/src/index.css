@@ -9,7 +9,14 @@
   background-color: #9bffe1;
 }
 
-button {
+button, input {
   -webkit-app-region: no-drag;
 }
 
+.window-drag {
+  -webkit-app-region: drag;
+}
+
+.no-window-drag, .\!window-drag {
+  -webkit-app-region: no-drag;
+}

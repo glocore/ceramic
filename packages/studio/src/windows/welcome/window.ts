@@ -1,12 +1,8 @@
+import { invariant } from "@ceramic/common";
 import { BrowserWindow, dialog, ipcMain, Menu } from "electron";
-import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
-import { createCeramicApp } from "src/createCeramicApp";
-import { store } from "src/store";
-import { createIdeWindow } from "../ide/window";
 import { closeWindow, windows } from "src/window";
-import { invariant } from "@ceramic/common";
 
 declare const RENDERER_VITE_DEV_SERVER_URL: string;
 declare const RENDERER_VITE_NAME: string;
@@ -82,22 +78,6 @@ export const createWelcomeWindow = () => {
   welcomeWindow.webContents.ipc.on("close-window", () =>
     closeWindow("welcome")
   );
-
-  welcomeWindow.webContents.ipc.handle("get-recent-projects", () => {
-    const storedRecents = new Set(store.get("recents", []).reverse());
-
-    const recents = new Map<string, string>();
-
-    storedRecents.forEach((projectPath) => {
-      const pkg = JSON.parse(
-        fs.readFileSync(path.join(projectPath, "package.json"), "utf-8")
-      );
-      const projectName = pkg.name;
-      recents.set(projectPath, projectName);
-    });
-
-    return recents;
-  });
 };
 
 ipcMain.handle("request-new-project-target-dir", async () => {
@@ -106,7 +86,7 @@ ipcMain.handle("request-new-project-target-dir", async () => {
   invariant(!!window);
 
   const result = await dialog.showOpenDialog(window, {
-    title: "Select destination",
+    title: "Select project destination",
     properties: ["openDirectory"],
   });
 
@@ -116,28 +96,3 @@ ipcMain.handle("request-new-project-target-dir", async () => {
 
   return newProjectTargetDir;
 });
-
-ipcMain.handle(
-  "create-new-project",
-  (
-    e,
-    {
-      projectName,
-      projectPath: targetDir,
-    }: { projectName: string; projectPath: string }
-  ) => {
-    const projectPath = createCeramicApp({
-      projectName,
-      targetDir,
-    });
-
-    const recents = store.get("recents", []);
-    recents.push(projectPath);
-
-    store.set("recents", recents);
-
-    closeWindow("welcome");
-
-    createIdeWindow({ project: { name: projectName, path: projectPath } });
-  }
-);

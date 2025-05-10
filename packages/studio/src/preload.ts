@@ -5,15 +5,18 @@ const electronApi = {
 
   closeWindow: () => ipcRenderer.send("close-window"),
 
-  createNewProject: (options: { projectName: string; projectPath: string }) =>
-    ipcRenderer.invoke("create-new-project", options),
+  createNewProject: (options: {
+    projectName: string;
+    projectIdentifier: string;
+    projectPath: string;
+  }): Promise<string> => ipcRenderer.invoke("create-new-project", options),
 
   requestNewProjectTargetDir: (): Promise<string> =>
     ipcRenderer.invoke("request-new-project-target-dir"),
 
   getRecentProjects: () => ipcRenderer.invoke("get-recent-projects"),
 
-  openProject: (props: { project: { name: string; path: string } }) =>
+  openProject: (props: { project: { path: string } }) =>
     ipcRenderer.invoke("open-project", { project: props.project }),
 
   getProjectFiles: (props: { projectPath: string }): Promise<Folder> =>
