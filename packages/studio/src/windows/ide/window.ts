@@ -16,9 +16,11 @@ export const createIdeWindow = ({
 }) => {
   ideWindow = new BrowserWindow({
     frame: false,
-    // show: false,
+    show: false,
     paintWhenInitiallyHidden: true,
     title: path.basename(project.path),
+    width: 1280,
+    height: 800,
 
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
