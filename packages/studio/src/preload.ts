@@ -21,6 +21,9 @@ const electronApi = {
 
   getProjectFiles: (props: { projectPath: string }): Promise<Folder> =>
     ipcRenderer.invoke("get-project-files", { projectPath: props.projectPath }),
+
+  getFileContents: (props: { path: string }) =>
+    ipcRenderer.invoke("get-file-contents", props),
 } as const;
 
 contextBridge.exposeInMainWorld("electronApi", electronApi);

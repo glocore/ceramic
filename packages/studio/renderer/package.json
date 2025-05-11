@@ -10,6 +10,13 @@
   },
   "dependencies": {
     "@ceramic/common": "workspace:*",
+    "@codemirror/autocomplete": "^6.18.6",
+    "@codemirror/commands": "^6.8.1",
+    "@codemirror/language": "^6.11.0",
+    "@codemirror/lint": "^6.8.5",
+    "@codemirror/search": "^6.5.10",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.36.7",
     "@remixicon/react": "^4.6.0",
     "@tanstack/react-form": "^1.9.0",
     "@tanstack/react-query": "^5.75.1",

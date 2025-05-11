@@ -8,6 +8,7 @@ import { createWelcomeWindow } from "./windows/welcome/window";
 import { closeWindow } from "./window";
 import { createIdeWindow } from "./windows/ide/window";
 import { createCeramicApp } from "./createCeramicApp";
+import fs from "node:fs/promises";
 
 if (started) {
   app.quit();
@@ -54,3 +55,7 @@ ipcMain.handle(
     return projectPath;
   }
 );
+
+ipcMain.handle("get-file-contents", async (e, props: { path: string }) => {
+  return fs.readFile(props.path, { encoding: "utf-8" });
+});
