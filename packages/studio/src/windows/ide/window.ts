@@ -12,7 +12,7 @@ let ideWindow: BrowserWindow;
 export const createIdeWindow = ({ project }: { project: { path: string } }) => {
   ideWindow = new BrowserWindow({
     frame: false,
-    show: false,
+    show: true,
     paintWhenInitiallyHidden: true,
     title: path.basename(project.path),
     width: 1280,

@@ -1,10 +1,9 @@
+import { File } from "@ceramic/common";
 import fs from "node:fs/promises";
 import path from "node:path";
 
 export const getFiles = async (props: { path: string }) => {
-  type Folder = { id: string; name: string; children?: Folder[] } | Folder[];
-
-  const walk = async (filePath: string): Promise<Folder[]> => {
+  const walk = async (filePath: string): Promise<File[]> => {
     const contents = await fs.readdir(filePath);
 
     return Promise.all(
@@ -12,11 +11,20 @@ export const getFiles = async (props: { path: string }) => {
         const absolute = path.join(filePath, item);
         const isDirectory = (await fs.stat(absolute)).isDirectory();
 
+        if (isDirectory) {
+          return {
+            path: absolute,
+            name: item,
+            isDirectory: true,
+            children: await walk(absolute),
+          } satisfies File;
+        }
+
         return {
-          id: absolute,
+          path: absolute,
           name: item,
-          children: isDirectory ? await walk(absolute) : undefined,
-        };
+          isDirectory: false,
+        } satisfies File;
       })
     );
   };

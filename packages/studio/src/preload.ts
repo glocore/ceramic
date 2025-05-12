@@ -1,3 +1,4 @@
+import { File } from "@ceramic/common";
 import { contextBridge, ipcRenderer } from "electron";
 
 const electronApi = {
@@ -19,7 +20,7 @@ const electronApi = {
   openProject: (props: { project: { path: string } }) =>
     ipcRenderer.invoke("open-project", { project: props.project }),
 
-  getProjectFiles: (props: { projectPath: string }): Promise<Folder> =>
+  getProjectFiles: (props: { projectPath: string }): Promise<File[]> =>
     ipcRenderer.invoke("get-project-files", { projectPath: props.projectPath }),
 
   getFileContents: (props: { path: string }) =>
@@ -29,5 +30,3 @@ const electronApi = {
 contextBridge.exposeInMainWorld("electronApi", electronApi);
 
 export type ElectronApi = typeof electronApi;
-
-type Folder = { id: string; name: string; children?: Folder }[];

@@ -5,6 +5,7 @@ import {
   completionKeymap,
 } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { javascript } from "@codemirror/lang-javascript";
 import {
   bracketMatching,
   defaultHighlightStyle,
@@ -30,6 +31,8 @@ import {
 } from "@codemirror/view";
 import React, { useEffect, useRef, useState } from "react";
 import "./Editor.css";
+import { cn } from "src/utils";
+import { Lang } from "src/types";
 
 type EditorProps = React.ComponentProps<"div"> & {
   filePath?: string;
@@ -44,12 +47,20 @@ export const Editor = ({ filePath, className, ...divProps }: EditorProps) => {
       .then(setFileContents);
   }
 
-  const editorRef = useEditor({ doc: fileContents });
+  const lang = filePath?.split(".").at(-1) as Lang;
 
-  return <div ref={editorRef} className={className} {...divProps} />;
+  const editorRef = useEditor({ doc: fileContents, lang: lang });
+
+  return (
+    <div
+      ref={editorRef}
+      className={cn("w-full h-full", className)}
+      {...divProps}
+    />
+  );
 };
 
-function useEditor(props: { doc?: string | null } = {}) {
+function useEditor(props: { lang?: Lang; doc?: string | null } = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorViewRef = useRef<EditorView>(null);
 
@@ -110,19 +121,56 @@ function useEditor(props: { doc?: string | null } = {}) {
             // Keys related to the linter system
             ...lintKeymap,
           ]),
-        ],
+        ].concat(...getExtensionsForLanguage({ lang: props.lang })),
       });
-
-      editorViewRef.current?.setState(state);
 
       editorViewRef.current = new EditorView({
         parent: containerRef.current,
         state,
       });
     }
-  }, [props.doc]);
+  }, [props.doc, props.lang]);
 
   return function handleContainerRef(ref: HTMLDivElement) {
     containerRef.current = ref;
   };
 }
+
+const getExtensionsForLanguage = (props: { lang?: Lang }) => {
+  switch (props.lang) {
+    case undefined:
+      return [];
+
+    case "ts":
+    case "js":
+    case "cjs":
+    case "mjs":
+    case "cts":
+    case "mts":
+    case "jsx":
+    case "tsx":
+    case "mjsx":
+    case "cjsx":
+    case "mtsx":
+    case "ctsx":
+      return [
+        javascript({
+          jsx: ["jsx", "tsx", "mjsx", "mtsx", "cjsx", "ctsx"].includes(
+            props.lang
+          ),
+          typescript: ["ts", "cts", "mts", "tsx", "mtsx", "ctsx"].includes(
+            props.lang
+          ),
+        }),
+      ];
+
+    default: {
+      function exhaustivenessCheck(value: never) {
+        console.error(`No extension found for language: ${value}`);
+        return [];
+      }
+
+      return exhaustivenessCheck(props.lang);
+    }
+  }
+};
