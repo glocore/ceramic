@@ -6,14 +6,14 @@ import {
 } from "@remixicon/react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Route } from "..";
 import { FileIcon } from "./FileIcon";
 
-export function FileTree(props: {
-  rootPath: string;
-  onFileSelect?: (file: File) => void;
-}) {
+export function FileTree(props: { onFileSelect?: (file: File) => void }) {
+  const { projectPath } = Route.useSearch();
+
   const { data: projectFiles } = useSuspenseQuery(
-    projectFilesQueryOptions({ path: props.rootPath })
+    projectFilesQueryOptions({ path: projectPath })
   );
 
   return (
@@ -136,7 +136,7 @@ const projectFilesQueryOptions = (props: { path: string }) =>
     queryFn: async () => {
       return (
         (await window.electronApi?.getProjectFiles({
-          projectPath: props.path,
+          path: props.path,
         })) ?? ([] as File[])
       );
     },

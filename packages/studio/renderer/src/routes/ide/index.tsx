@@ -34,8 +34,6 @@ function RouteComponent() {
     });
   }, []);
 
-  const { projectPath } = Route.useSearch();
-
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
 
   const navigatorPanelRef = useRef<ImperativePanelHandle>(null);
@@ -73,10 +71,7 @@ function RouteComponent() {
         >
           <div className="h-(--title-bar-height) border-b-[1.5px] border-neutral-300 window-drag" />
           <div className="overflow-auto flex-1">
-            <FileTree
-              rootPath={projectPath}
-              onFileSelect={(file) => setSelectedFile(file)}
-            />
+            <FileTree onFileSelect={(file) => setSelectedFile(file)} />
           </div>
         </Panel>
         <PanelResizeHandle />
@@ -108,11 +103,11 @@ function RouteComponent() {
 
 const projectFilesQueryOptions = (props: { path: string }) =>
   queryOptions<File[]>({
-    queryKey: ["project-files"],
+    queryKey: ["project-files", props.path],
     queryFn: async () => {
       return (
         (await window.electronApi?.getProjectFiles({
-          projectPath: props.path,
+          path: props.path,
         })) ?? []
       );
     },

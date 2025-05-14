@@ -16,7 +16,7 @@ export const createWelcomeWindow = () => {
     maximizable: false,
     minimizable: false,
     fullscreenable: false,
-    show: false,
+    show: true,
     paintWhenInitiallyHidden: true,
     title: "Welcome to Ceramic Studio",
 

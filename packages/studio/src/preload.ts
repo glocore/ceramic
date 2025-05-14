@@ -20,8 +20,8 @@ const electronApi = {
   openProject: (props: { project: { path: string } }) =>
     ipcRenderer.invoke("open-project", { project: props.project }),
 
-  getProjectFiles: (props: { projectPath: string }): Promise<File[]> =>
-    ipcRenderer.invoke("get-project-files", { projectPath: props.projectPath }),
+  getProjectFiles: (props: { path: string }): Promise<File[]> =>
+    ipcRenderer.invoke("get-project-files", props),
 
   getFileContents: (props: { path: string }) =>
     ipcRenderer.invoke("get-file-contents", props),
