@@ -11,6 +11,7 @@ let ideWindow: BrowserWindow;
 
 export const createIdeWindow = ({ project }: { project: { path: string } }) => {
   ideWindow = new BrowserWindow({
+    titleBarStyle: "hiddenInset",
     frame: false,
     show: true,
     paintWhenInitiallyHidden: true,

@@ -29,7 +29,7 @@ export function FileTree(props: {
           props.onFileSelect?.(targetFile as File);
         }
       }}
-      className="p-2 [--item-height:calc(6.5_*_0.25rem)]"
+      className="p-2 [--item-height:calc(6.5_*_0.25rem)] text-neutral-700 text-sm"
     >
       <FolderItem name="root" files={projectFiles} defaultExpanded />
     </div>
@@ -48,7 +48,7 @@ function FileItem(props: { file: File }) {
     <div
       data-is-file={true}
       data-file={JSON.stringify(props.file)}
-      className="text-sm h-(--item-height) flex items-center gap-x-2 text-nowrap"
+      className="h-(--item-height) flex items-center gap-x-2 text-nowrap"
     >
       <div className="shrink-0 ps-0.5">
         <FileIcon file={props.file} />
@@ -86,12 +86,12 @@ function FolderItem(props: {
             className="shrink-0 w-4 group-data-[expanded=true]:rotate-90 transition-transform duration-200"
           />
           {props.files.length > 0 ? (
-            <RiFolder2Fill className="w-4 shrink-0 fill-sky-400" />
+            <RiFolder2Fill className="w-4 shrink-0 fill-neutral-500" />
           ) : (
-            <RiFolder2Line className="w-4 shrink-0 fill-sky-400" />
+            <RiFolder2Line className="w-4 shrink-0 fill-neutral-500" />
           )}
         </div>
-        <div className="shrink-0 text-sm">{props.name}</div>
+        <div className="shrink-0">{props.name}</div>
       </div>
 
       {expanded && (

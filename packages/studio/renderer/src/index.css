@@ -17,6 +17,6 @@ button, input {
   -webkit-app-region: drag;
 }
 
-.no-window-drag, .\!window-drag {
+.no-window-drag {
   -webkit-app-region: no-drag;
 }

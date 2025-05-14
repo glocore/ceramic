@@ -53,7 +53,7 @@ function WelcomePage() {
           <img src={icon} className="h-30 w-30" />
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-semibold">Ceramic Studio</h1>
-            <div className="!window-drag select-text! flex justify-center w-full">
+            <div className="no-window-drag select-text! flex justify-center w-full">
               <span className="text-neutral-500 select-text!">
                 Version {pkg.version}
               </span>
