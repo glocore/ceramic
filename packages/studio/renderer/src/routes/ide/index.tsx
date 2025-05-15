@@ -67,20 +67,22 @@ function RouteComponent() {
           defaultSize={navigatorPanelMinSize}
           collapsible
           collapsedSize={0}
+          onCollapse={() => setIsNavigatorCollapsed(true)}
+          onExpand={() => setIsNavigatorCollapsed(false)}
           className="flex flex-col"
         >
-          <div className="h-(--title-bar-height) border-b-[1.5px] border-neutral-300 window-drag" />
+          <div className="h-(--title-bar-height) border-b border-neutral-300 window-drag" />
           <div className="overflow-auto flex-1">
             <FileTree onFileSelect={(file) => setSelectedFile(file)} />
           </div>
         </Panel>
-        <PanelResizeHandle />
+        <PanelResizeHandle className="cursor-col-resize" />
         <Panel
           id="editor"
           minSize={20}
           className="flex flex-col border-s-[0.5px] border-black/10 bg-clip-padding shadow-[-2px_0_5px_-3px_rgba(0,0,0,0.1)]"
         >
-          <div className="h-(--title-bar-height) bg-white/50 window-drag" />
+          <div className="h-(--title-bar-height) border-b border-neutral-200 bg-white/50 window-drag" />
           <div className="flex-1 bg-white">
             <Editor filePath={selectedFile?.path} />
           </div>
