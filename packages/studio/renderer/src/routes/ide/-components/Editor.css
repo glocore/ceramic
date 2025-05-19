@@ -1,3 +1,7 @@
 .cm-editor {
   height: 100%;
 }
+
+.cm-lineNumbers {
+  min-width: 3rem;
+}

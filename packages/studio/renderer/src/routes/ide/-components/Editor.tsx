@@ -31,6 +31,7 @@ import {
 } from "@codemirror/view";
 import React, { useEffect, useRef, useState } from "react";
 import "./Editor.css";
+import "./remixicon.css";
 import { cn } from "src/utils";
 import { Lang } from "src/types";
 
@@ -54,7 +55,7 @@ export const Editor = ({ filePath, className, ...divProps }: EditorProps) => {
   return (
     <div
       ref={editorRef}
-      className={cn("w-full h-full", className)}
+      className={cn("w-full h-full rotate", className)}
       {...divProps}
     />
   );
@@ -74,7 +75,18 @@ function useEditor(props: { lang?: Lang; doc?: string | null } = {}) {
           // A line number gutter
           lineNumbers(),
           // A gutter with code folding markers
-          foldGutter(),
+          foldGutter({
+            markerDOM(open) {
+              const icon = document.createElement("i");
+              icon.classList = "ri-arrow-down-s-line inline-block";
+
+              if (open) {
+                icon.classList.add("-rotate-90");
+              }
+
+              return icon;
+            },
+          }),
           // Replace non-printable characters with placeholders
           highlightSpecialChars(),
           // The undo history

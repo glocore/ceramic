@@ -65,16 +65,16 @@ function FileItem(props: { file: File }) {
     <div
       data-is-file={true}
       data-file={JSON.stringify(props.file)}
-      data-is-selected={isSelected}
-      className="rounded h-(--item-height) flex items-center gap-x-2 \
+      data-selected={isSelected}
+      className="group/file-item rounded h-(--item-height) flex items-center gap-x-2 \
       pe-2 ps-[calc(calc(var(--level,_0)_*_var(--level-offset)))] \
-      data-[is-selected=true]:bg-emerald-500 data-[is-selected=true]:text-white"
+      data-[selected=true]:bg-emerald-500 data-[selected=true]:text-white"
       onClick={() => setSelected(props.file.path)}
     >
       <span
         data-file={JSON.stringify(props.file)}
         data-is-file={true}
-        className="shrink-0 ps-0.5"
+        className="shrink-0 ps-0.5 flex items-center"
       >
         <FileIcon file={props.file} />
       </span>

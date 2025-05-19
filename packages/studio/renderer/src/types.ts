@@ -14,12 +14,13 @@ export type Lang =
 
 export type FileIconId =
   | "css"
-  | "git_ignore"
+  | "git"
   | "html"
   | "javascript"
   | "json"
   | "markdown"
   | "react"
+  | "svg"
   | "text"
   | "tsconfig"
   | "typescript"

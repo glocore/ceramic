@@ -1,49 +1,31 @@
 import { File } from "@ceramic/common";
 import { RiFileList2Line } from "@remixicon/react";
 import { FileIconId } from "src/types";
-import cssIcon from "/icons/css.svg";
-import gitIgnoreIcon from "/icons/git_ignore.svg";
-import htmlIcon from "/icons/html.svg";
-import reactIcon from "/icons/react.svg";
-import typescriptIcon from "/icons/typescript.svg";
-import javascriptIcon from "/icons/javascript.svg";
-import jsonIcon from "/icons/json.svg";
-import tsconfigIcon from "/icons/tsconfig.svg";
-import viteIcon from "/icons/vite.svg";
-import markdownIcon from "/icons/markdown.svg";
-import { cn } from "src/utils";
+import "./fileicons-font/fileicons.css";
 
 export function FileIcon(props: { file: File }) {
   const fileIconId = getFileIconIdForFile({ file: props.file });
 
   switch (fileIconId) {
     case "css":
-      return <SvgIcon src={cssIcon} />;
-    case "git_ignore":
-      return <SvgIcon src={gitIgnoreIcon} />;
+    case "git":
     case "html":
-      return <SvgIcon src={htmlIcon} />;
     case "javascript":
-      return <SvgIcon src={javascriptIcon} />;
     case "json":
-      return <SvgIcon src={jsonIcon} />;
     case "markdown":
-      return <SvgIcon src={markdownIcon} />;
     case "react":
-      return <SvgIcon src={reactIcon} />;
+    case "svg":
     case "tsconfig":
-      return <SvgIcon src={tsconfigIcon} />;
     case "typescript":
-      return <SvgIcon src={typescriptIcon} />;
     case "vite":
-      return <SvgIcon src={viteIcon} />;
+      return <Icon icon={fileIconId} />;
     case "text":
-      return <RiFileList2Line className="w-4 fill-neutral-500" />;
+      return <DefaultFileIcon />;
 
     default: {
       function exhaustivenessCheck(value: never) {
         console.error(`No file icon found for ID: ${value}`);
-        return <RiFileList2Line className="w-4 fill-neutral-500" />;
+        return <DefaultFileIcon />;
       }
 
       return exhaustivenessCheck(fileIconId);
@@ -51,13 +33,46 @@ export function FileIcon(props: { file: File }) {
   }
 }
 
-function SvgIcon({ className, ...delegated }: React.ComponentProps<"img">) {
+function DefaultFileIcon() {
   return (
-    <div className="-ms-2 mt-0.25 translate-x-1">
-      <img className={cn("w-6", className)} {...delegated} />
-    </div>
+    <RiFileList2Line className="w-4 text-neutral-500 group-data-[selected=true]/file-item:text-inherit" />
   );
 }
+
+function Icon({
+  icon,
+  className,
+  style,
+  ...delegated
+}: React.ComponentProps<"i"> & { icon: FileIconId }) {
+  return (
+    <i
+      className={`text-(--color) group-data-[selected=true]/file-item:text-inherit fileicons-${icon} ${className}`}
+      style={
+        {
+          "--color": defaultColor[icon],
+          ...style,
+        } as React.CSSProperties
+      }
+      {...delegated}
+    />
+  );
+}
+
+const defaultColor = {
+  css: "#529BBA",
+  git: "#F34F29",
+  html: "#EF7623",
+  javascript: "#FBC02D",
+  json: "#E44D26",
+  markdown: "#529BBA",
+  react: "#4F8FAA",
+  text: "#737373",
+  tsconfig: "#3178C6",
+  typescript: "#007ACC",
+  vite: "#FBC02D",
+  svg: "#9068B0",
+} satisfies Record<FileIconId, `#${string}`>;
 
 function getFileIconIdForFile({ file }: { file: File }): FileIconId {
   function endsWith(searchString: string) {
@@ -70,7 +85,7 @@ function getFileIconIdForFile({ file }: { file: File }): FileIconId {
 
   switch (file) {
     case matches(".gitignore"):
-      return "git_ignore";
+      return "git";
 
     case endsWith("vite.config.js"):
     case endsWith("vite.config.mjs"):
@@ -83,7 +98,7 @@ function getFileIconIdForFile({ file }: { file: File }): FileIconId {
     case endsWith(".md"):
       return "markdown";
 
-    case endsWith("tsconfig.json"):
+    case matches("tsconfig.json"):
       return "tsconfig";
 
     case endsWith(".html"):

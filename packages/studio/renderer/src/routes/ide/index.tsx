@@ -1,16 +1,16 @@
+import { File } from "@ceramic/common";
+import { RiSideBarLine } from "@remixicon/react";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import {
+  ImperativePanelHandle,
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
+} from "react-resizable-panels";
 import { Editor } from "./-components/Editor";
 import { FileTree } from "./-components/FileTree";
-import {
-  PanelGroup,
-  Panel,
-  PanelResizeHandle,
-  ImperativePanelHandle,
-} from "react-resizable-panels";
-import { File } from "@ceramic/common";
-import { RiSideBarLine } from "@remixicon/react";
 
 export const Route = createFileRoute("/ide/")({
   component: RouteComponent,
@@ -71,19 +71,26 @@ function RouteComponent() {
           onExpand={() => setIsNavigatorCollapsed(false)}
           className="flex flex-col"
         >
-          <div className="h-(--title-bar-height) border-b border-neutral-300 window-drag" />
+          <div className="relative h-(--title-bar-height) border-b border-neutral-300">
+            <div className="absolute inset-0 end-2 window-drag" />
+          </div>
           <div className="overflow-auto flex-1">
             <FileTree onFileSelect={(file) => setSelectedFile(file)} />
           </div>
         </Panel>
-        <PanelResizeHandle className="cursor-col-resize" />
+        <PanelResizeHandle className="no-window-drag peer/handle" />
         <Panel
           id="editor"
           minSize={20}
-          className="flex flex-col border-s-[0.5px] border-black/10 bg-clip-padding shadow-[-2px_0_5px_-3px_rgba(0,0,0,0.1)]"
+          className="flex flex-col border-s-[0.5px] border-black/10 bg-clip-padding \
+          transition-shadow shadow-[-2px_0_5px_-3px_rgba(0,0,0,0.1)] \
+          peer-data-[resize-handle-state=hover]/handle:shadow-[-6px_0_10px_-6px_rgba(0,0,0,0.2)] \
+          peer-data-[resize-handle-state=drag]/handle:shadow-[-8px_0_10px_-6px_rgba(0,0,0,0.2)]"
         >
-          <div className="h-(--title-bar-height) border-b border-neutral-200 bg-white/50 window-drag" />
-          <div className="flex-1 bg-white">
+          <div className="relative h-(--title-bar-height) border-b border-neutral-200 bg-white/50 shrink-0">
+            <div className="absolute inset-0 start-2 window-drag" />
+          </div>
+          <div className="flex-1 bg-white min-h-0">
             <Editor filePath={selectedFile?.path} />
           </div>
         </Panel>
