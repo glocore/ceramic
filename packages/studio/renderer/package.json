@@ -46,6 +46,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "svgtofont": "^6.3.2",
     "tailwindcss": "^4.1.4",
     "typescript": "catalog:",
     "typescript-eslint": "^8.26.1",

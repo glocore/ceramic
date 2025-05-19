@@ -1,7 +1,7 @@
 import { File } from "@ceramic/common";
 import { RiFileList2Line } from "@remixicon/react";
 import { FileIconId } from "src/types";
-import "./fileicons-font/fileicons.css";
+import "./fileicons/font/fileicons.css";
 
 export function FileIcon(props: { file: File }) {
   const fileIconId = getFileIconIdForFile({ file: props.file });

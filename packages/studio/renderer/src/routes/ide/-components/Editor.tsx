@@ -31,7 +31,6 @@ import {
 } from "@codemirror/view";
 import React, { useEffect, useRef, useState } from "react";
 import "./Editor.css";
-import "./remixicon.css";
 import { cn } from "src/utils";
 import { Lang } from "src/types";
 

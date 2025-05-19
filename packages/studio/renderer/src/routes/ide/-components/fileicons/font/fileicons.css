@@ -1,15 +1,10 @@
 @font-face {
   font-family: "fileicons";
-  src: url('fileicons.eot?t=1747632670759'); /* IE9*/
-  src: url('fileicons.eot?t=1747632670759#iefix') format('embedded-opentype') /* IE6-IE8 */,
-  url('fileicons.woff2?t=1747632670759') format('woff2'),
-  url('fileicons.woff?t=1747632670759') format('woff'),
-  url('fileicons.ttf?t=1747632670759') format('truetype'),
-  url('fileicons.svg?t=1747632670759') format('svg');
+  src: url('fileicons.woff2?t=1747641213956') format('woff2');
 }
 
 [class^="fileicons-"], [class*=" fileicons-"] {
-  font-family: 'fileicons' !important;
+  font-family: 'fileicons' !important;font-size: 16px;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -27,4 +22,5 @@
 .fileicons-tsconfig::before { content: "\ea09"; }
 .fileicons-typescript::before { content: "\ea0a"; }
 .fileicons-vite::before { content: "\ea0b"; }
+
 
