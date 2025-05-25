@@ -10,7 +10,10 @@ import { create } from "zustand";
 import { Route } from "..";
 import { FileIcon } from "./FileIcon";
 
-export function FileTree(props: { onFileSelect?: (file: File) => void }) {
+export function FileTree(props: {
+  onFileSelect: (file: File) => void;
+  onFileOpen: (file: File) => void;
+}) {
   const { projectPath } = Route.useSearch();
   const projectName = projectPath.split("/").pop()!;
 
@@ -28,7 +31,18 @@ export function FileTree(props: { onFileSelect?: (file: File) => void }) {
           const targetFile = JSON.parse(
             target.getAttribute("data-file") ?? "{}"
           );
-          props.onFileSelect?.(targetFile as File);
+          props.onFileSelect(targetFile as File);
+        }
+      }}
+      onDoubleClick={(e) => {
+        const target = e.target as EventTarget & HTMLDivElement;
+        const isTargetFile = target.getAttribute("data-is-file");
+
+        if (isTargetFile) {
+          const targetFile = JSON.parse(
+            target.getAttribute("data-file") ?? "{}"
+          );
+          props.onFileOpen(targetFile as File);
         }
       }}
       className="p-2 text-neutral-700 text-sm [--item-height:calc(6.5_*_0.25rem)]"
@@ -207,15 +221,12 @@ const projectFilesQueryOptions = (props: { path: string }) =>
 
 type FileTreeState = {
   selectedFiles: Set<string>;
-  addSelectedFile: (file: string) => void;
   setSelectedFile: (file: string) => void;
 };
 
 const useFileTreeStore = create<FileTreeState>()((set) => {
   return {
     selectedFiles: new Set(),
-    addSelectedFile: (file) =>
-      set((state) => ({ selectedFiles: state.selectedFiles.add(file) })),
     setSelectedFile: (file) => set(() => ({ selectedFiles: new Set([file]) })),
   };
 });

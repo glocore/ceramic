@@ -1,5 +1,5 @@
 import { File } from "@ceramic/common";
-import { RiSideBarLine } from "@remixicon/react";
+import { RiCloseLine, RiSideBarLine } from "@remixicon/react";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,7 @@ import {
 } from "react-resizable-panels";
 import { Editor } from "./-components/Editor";
 import { FileTree } from "./-components/FileTree";
+import { useTabStore } from "./-components/Tabs";
 
 export const Route = createFileRoute("/ide/")({
   component: RouteComponent,
@@ -34,7 +35,23 @@ function RouteComponent() {
     });
   }, []);
 
-  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const {
+    tabs,
+    activeTabIndex,
+    previewTabIndex,
+    setActiveTab,
+    addTab,
+    previewTab,
+    removeTab,
+  } = useTabStore();
+
+  const handleFileSelect = (file: File) => {
+    previewTab(file.path);
+  };
+
+  const handleFileOpen = (file: File) => {
+    addTab(file.path);
+  };
 
   const navigatorPanelRef = useRef<ImperativePanelHandle>(null);
   const [isNavigatorCollapsed, setIsNavigatorCollapsed] = useState(false);
@@ -57,6 +74,8 @@ function RouteComponent() {
 
   const navigatorPanelMinSize = usePercentForPixels(220);
 
+  const editorFilePath: string | undefined = tabs[activeTabIndex];
+
   return (
     <div className="h-screen [--title-bar-height:calc(var(--spacing)_*_10)] relative">
       <PanelGroup direction="horizontal" className="bg-neutral-200">
@@ -75,14 +94,17 @@ function RouteComponent() {
             <div className="absolute inset-0 end-2 window-drag" />
           </div>
           <div className="overflow-auto flex-1">
-            <FileTree onFileSelect={(file) => setSelectedFile(file)} />
+            <FileTree
+              onFileSelect={(file) => handleFileSelect(file)}
+              onFileOpen={(file) => handleFileOpen(file)}
+            />
           </div>
         </Panel>
         <PanelResizeHandle className="no-window-drag peer/handle" />
         <Panel
           id="editor"
           minSize={20}
-          className="flex flex-col border-s-[0.5px] border-black/10 bg-clip-padding \
+          className="flex flex-col border-s-[0.5px] bg-white border-black/10 bg-clip-padding \
           transition-shadow shadow-[-2px_0_5px_-3px_rgba(0,0,0,0.1)] \
           peer-data-[resize-handle-state=hover]/handle:shadow-[-6px_0_10px_-6px_rgba(0,0,0,0.2)] \
           peer-data-[resize-handle-state=drag]/handle:shadow-[-8px_0_10px_-6px_rgba(0,0,0,0.2)]"
@@ -90,8 +112,26 @@ function RouteComponent() {
           <div className="relative h-(--title-bar-height) border-b border-neutral-200 bg-white/50 shrink-0">
             <div className="absolute inset-0 start-2 window-drag" />
           </div>
-          <div className="flex-1 bg-white min-h-0">
-            <Editor filePath={selectedFile?.path} />
+          <div className="flex divide-x divide-neutral-300">
+            {tabs.map((tab, index) => (
+              <div
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                onDoubleClick={() => addTab(tab)}
+                className={`group/tab px-2 flex items-center gap-1 ${index === activeTabIndex ? "text-emerald-700 bg-emerald-100" : "text-neutral-500"} ${index === previewTabIndex ? "italic" : ""}`}
+              >
+                <button
+                  onClick={() => removeTab(tab)}
+                  className="text-neutral-500 group-hover/tab:visible hover:bg-neutral-700/10 rounded-xs"
+                >
+                  <RiCloseLine className="w-4 h-4" />
+                </button>
+                <span>{tab.split("/").at(-1)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex-1 min-h-0">
+            {editorFilePath && <Editor filePath={editorFilePath} />}
           </div>
         </Panel>
       </PanelGroup>
