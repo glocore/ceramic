@@ -8,7 +8,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "oxlint ."
   },
   "license": "MIT",
   "pnpm": {
@@ -28,10 +28,8 @@
     "@electron-forge/publisher-github": "^7.8.0",
     "@electron/fuses": "^1.8.0",
     "@types/electron-squirrel-startup": "^1.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
     "electron": "36.1.0",
-    "eslint": "^8.0.1",
+    "oxlint": "^0.16.12",
     "ts-node": "^10.0.0",
     "typescript": "catalog:",
     "vite": "catalog:",

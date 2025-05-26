@@ -6,7 +6,6 @@ export type RouterContext = {
   queryClient: typeof queryClient;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const router = createRouter({
   routeTree,
   context: {

@@ -81,7 +81,10 @@ function WelcomePage() {
       </div>
       <div className="flex-1 bg-[#e4e4e4]">
         {recentProjects.map((project) => (
-          <button onClick={() => handleRecentProjectClick(project)}>
+          <button
+            key={project.path}
+            onClick={() => handleRecentProjectClick(project)}
+          >
             <p>{project.name}</p>
             <p>{project.path}</p>
           </button>
