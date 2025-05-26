@@ -5,10 +5,11 @@ import {
   RiFolder2Line,
 } from "@remixicon/react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { create } from "zustand";
 import { Route } from "..";
 import { FileIcon } from "./FileIcon";
+import { useSelectedFileStore } from "../-store";
 
 export function FileTree(props: {
   onFileSelect: (file: File) => void;
@@ -20,6 +21,16 @@ export function FileTree(props: {
   const { data: projectFiles } = useSuspenseQuery(
     projectFilesQueryOptions({ path: projectPath })
   );
+
+  useEffect(() => {
+    const unsubscribe = useSelectedFileStore.subscribe(({ selectedFile }) => {
+      if (selectedFile?.path) {
+        useFileTreeStore.getState().setSelectedFile(selectedFile.path);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div

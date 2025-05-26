@@ -12,6 +12,7 @@ import {
 import { Editor } from "./-components/Editor";
 import { FileTree } from "./-components/FileTree";
 import { useTabStore } from "./-components/Tabs";
+import { useSelectedFileStore } from "./-store";
 
 export const Route = createFileRoute("/ide/")({
   component: RouteComponent,
@@ -44,6 +45,19 @@ function RouteComponent() {
     previewTab,
     removeTab,
   } = useTabStore();
+
+  useEffect(() => {
+    const unsubscribe = useTabStore.subscribe(({ activeTabIndex, tabs }) => {
+      const filePath = tabs[activeTabIndex];
+      useSelectedFileStore.getState().setSelectedFile({
+        path: filePath,
+        name: filePath.split("/").at(-1) ?? "",
+        isDirectory: false,
+      });
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleFileSelect = (file: File) => {
     previewTab(file.path);
