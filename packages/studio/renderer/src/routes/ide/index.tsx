@@ -1,5 +1,5 @@
 import { File } from "@ceramic/common";
-import { RiCloseLine, RiSideBarLine } from "@remixicon/react";
+import { RiSideBarLine } from "@remixicon/react";
 import { queryOptions } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
@@ -11,8 +11,8 @@ import {
 } from "react-resizable-panels";
 import { Editor } from "./-components/Editor";
 import { FileTree } from "./-components/FileTree";
-import { useTabStore } from "./-components/Tabs";
-import { useSelectedFileStore } from "./-store";
+import { Tabs } from "./-components/Tabs";
+import { useTabStore } from "./-store";
 
 export const Route = createFileRoute("/ide/")({
   component: RouteComponent,
@@ -36,28 +36,7 @@ function RouteComponent() {
     });
   }, []);
 
-  const {
-    tabs,
-    activeTabIndex,
-    previewTabIndex,
-    setActiveTab,
-    addTab,
-    previewTab,
-    removeTab,
-  } = useTabStore();
-
-  useEffect(() => {
-    const unsubscribe = useTabStore.subscribe(({ activeTabIndex, tabs }) => {
-      const filePath = tabs[activeTabIndex];
-      useSelectedFileStore.getState().setSelectedFile({
-        path: filePath,
-        name: filePath.split("/").at(-1) ?? "",
-        isDirectory: false,
-      });
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { tabs, activeTabIndex, addTab, previewTab } = useTabStore();
 
   const handleFileSelect = (file: File) => {
     previewTab(file.path);
@@ -126,24 +105,7 @@ function RouteComponent() {
           <div className="relative h-(--title-bar-height) border-b border-neutral-200 bg-white/50 shrink-0">
             <div className="absolute inset-0 start-2 window-drag" />
           </div>
-          <div className="flex divide-x divide-neutral-300">
-            {tabs.map((tab, index) => (
-              <div
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                onDoubleClick={() => addTab(tab)}
-                className={`group/tab px-2 flex items-center gap-1 ${index === activeTabIndex ? "text-emerald-700 bg-emerald-100" : "text-neutral-500"} ${index === previewTabIndex ? "italic" : ""}`}
-              >
-                <button
-                  onClick={() => removeTab(tab)}
-                  className="text-neutral-500 group-hover/tab:visible hover:bg-neutral-700/10 rounded-xs"
-                >
-                  <RiCloseLine className="w-4 h-4" />
-                </button>
-                <span>{tab.split("/").at(-1)}</span>
-              </div>
-            ))}
-          </div>
+          <Tabs />
           <div className="flex-1 min-h-0">
             {editorFilePath && <Editor filePath={editorFilePath} />}
           </div>

@@ -3,7 +3,7 @@ import { RiFileList2Line } from "@remixicon/react";
 import { FileIconId } from "src/types";
 import "./fileicons/font/fileicons.css";
 
-export function FileIcon(props: { file: File }) {
+export function FileIcon(props: { file: File; className?: string }) {
   const fileIconId = getFileIconIdForFile({ file: props.file });
 
   switch (fileIconId) {
@@ -18,9 +18,9 @@ export function FileIcon(props: { file: File }) {
     case "tsconfig":
     case "typescript":
     case "vite":
-      return <Icon icon={fileIconId} />;
+      return <Icon icon={fileIconId} className={props.className} />;
     case "text":
-      return <DefaultFileIcon />;
+      return <DefaultFileIcon className={props.className} />;
 
     default: {
       function exhaustivenessCheck(value: never) {
@@ -33,9 +33,15 @@ export function FileIcon(props: { file: File }) {
   }
 }
 
-function DefaultFileIcon() {
+function DefaultFileIcon({
+  className,
+  ...delegated
+}: React.ComponentProps<typeof RiFileList2Line>) {
   return (
-    <RiFileList2Line className="w-4 text-neutral-500 group-data-[selected=true]/file-item:text-inherit" />
+    <RiFileList2Line
+      className={`w-4 text-neutral-500 group-data-[selected=true]/file-item:text-inherit ${className}`}
+      {...delegated}
+    />
   );
 }
 
