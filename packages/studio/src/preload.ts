@@ -6,6 +6,8 @@ const electronApi = {
 
   closeWindow: () => ipcRenderer.send("close-window"),
 
+  getHomeDir: () => ipcRenderer.invoke("get-home-dir"),
+
   createNewProject: (options: {
     projectName: string;
     projectIdentifier: string;

@@ -9,6 +9,7 @@ import { closeWindow } from "./window";
 import { createIdeWindow } from "./windows/ide/window";
 import { createCeramicApp } from "./createCeramicApp";
 import fs from "node:fs/promises";
+import os from "node:os";
 import { getFiles } from "./utils";
 
 if (started) {
@@ -27,6 +28,10 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWelcomeWindow();
   }
+});
+
+ipcMain.handle("get-home-dir", () => {
+  return os.homedir();
 });
 
 ipcMain.handle(

@@ -10,6 +10,7 @@ import { create } from "zustand";
 import { Route } from "..";
 import { FileIcon } from "./FileIcon";
 import { useSelectedFileStore } from "../-store";
+import { getPrintablePath } from "src/path";
 
 export function FileTree(props: {
   onFileSelect: (file: File) => void;
@@ -198,7 +199,7 @@ function FolderItem(props: {
               });
             })
             .map((file) => (
-              <div key={file.path} title={file.path}>
+              <div key={file.path} title={getPrintablePath(file.path)}>
                 {file.isDirectory ? (
                   <FolderItem
                     key={file.path}
