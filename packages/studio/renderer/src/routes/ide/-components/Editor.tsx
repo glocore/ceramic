@@ -6,12 +6,14 @@ import {
 } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
+import { jsonc } from "@shopify/lang-jsonc";
 import {
   bracketMatching,
   defaultHighlightStyle,
   foldGutter,
   foldKeymap,
   indentOnInput,
+  LanguageSupport,
   syntaxHighlighting,
 } from "@codemirror/language";
 import { lintKeymap } from "@codemirror/lint";
@@ -28,11 +30,13 @@ import {
   keymap,
   lineNumbers,
   rectangularSelection,
+  ViewPlugin,
 } from "@codemirror/view";
 import React, { useEffect, useRef, useState } from "react";
 import "./Editor.css";
 import { cn } from "src/utils";
 import { Lang } from "src/types";
+import { langForFile } from "src/lang";
 
 type EditorProps = React.ComponentProps<"div"> & {
   filePath?: string;
@@ -47,7 +51,7 @@ export const Editor = ({ filePath, className, ...divProps }: EditorProps) => {
       .then(setFileContents);
   }
 
-  const lang = filePath?.split(".").at(-1) as Lang;
+  const lang = langForFile(filePath ?? "");
 
   const editorRef = useEditor({ doc: fileContents, lang: lang });
 
@@ -77,10 +81,10 @@ function useEditor(props: { lang?: Lang; doc?: string | null } = {}) {
           foldGutter({
             markerDOM(open) {
               const icon = document.createElement("i");
-              icon.classList = "ri-arrow-down-s-line inline-block";
+              icon.classList = "ri-arrow-right-s-line inline-block";
 
               if (open) {
-                icon.classList.add("-rotate-90");
+                icon.classList.add("rotate-90");
               }
 
               return icon;
@@ -132,7 +136,10 @@ function useEditor(props: { lang?: Lang; doc?: string | null } = {}) {
             // Keys related to the linter system
             ...lintKeymap,
           ]),
-        ].concat(...getExtensionsForLanguage({ lang: props.lang })),
+          themeExtension,
+          toggleActiveLineClass,
+          ...getExtensionsForLanguage({ lang: props.lang }),
+        ],
       });
 
       editorViewRef.current = new EditorView({
@@ -147,7 +154,9 @@ function useEditor(props: { lang?: Lang; doc?: string | null } = {}) {
   };
 }
 
-const getExtensionsForLanguage = (props: { lang?: Lang }) => {
+const getExtensionsForLanguage = (props: {
+  lang?: Lang;
+}): LanguageSupport[] => {
   switch (props.lang) {
     case undefined:
       return [];
@@ -174,14 +183,69 @@ const getExtensionsForLanguage = (props: { lang?: Lang }) => {
           ),
         }),
       ];
-
+    case "json":
+    case "jsonc":
+      return [jsonc()];
     default: {
-      function exhaustivenessCheck(value: never) {
-        console.error(`No extension found for language: ${value}`);
-        return [];
-      }
-
-      return exhaustivenessCheck(props.lang);
+      const exhaustivenessCheck: never = props.lang;
+      console.error(`No extension found for language: ${exhaustivenessCheck}`);
+      return [];
     }
   }
 };
+
+const toggleActiveLineClass = ViewPlugin.fromClass(class {});
+
+const color = {
+  cursor: "var(--color-emerald-500)",
+  selection: "var(--color-emerald-100)",
+  highlightBackground:
+    "color-mix(in oklab, var(--color-emerald-500) 5%, transparent)",
+};
+
+const themeExtension = EditorView.theme({
+  ".cm-gutters": {
+    backgroundColor: "var(--color-white)",
+    border: "none",
+  },
+
+  ".cm-foldGutter .cm-gutterElement .ri-arrow-right-s-line.rotate-90": {
+    transitionProperty: "opacity",
+    transitionDuration: "150ms",
+    opacity: 0,
+  },
+
+  ".cm-foldGutter .cm-gutterElement .ri-arrow-right-s-line": {
+    /* always show fold icon when code is folded */
+    opacity: 1,
+  },
+
+  ".cm-gutters:hover .cm-foldGutter .cm-gutterElement .ri-arrow-right-s-line": {
+    opacity: 1,
+  },
+
+  ".cm-activeLine, .cm-activeLineGutter": {
+    backgroundColor: color.highlightBackground,
+  },
+
+  ".cm-cursor, .cm-dropCursor": {
+    borderInlineStartColor: color.cursor,
+    borderInlineStartWidth: "2px",
+  },
+
+  ".cm-scroller > .cm-selectionLayer .cm-selectionBackground": {
+    backgroundColor: "var(--color-neutral-200)",
+  },
+
+  "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection":
+    {
+      backgroundColor: color.selection,
+    },
+
+  ".cm-selectionMatch": {
+    borderRadius: "0.25rem",
+    paddingBlock: "0.125rem",
+    backgroundColor:
+      "color-mix(in oklab, var(--color-neutral-500) 15%, transparent)",
+  },
+});

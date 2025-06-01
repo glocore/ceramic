@@ -10,7 +10,9 @@ export type Lang =
   | "mjsx"
   | "cjsx"
   | "mtsx"
-  | "ctsx";
+  | "ctsx"
+  | "json"
+  | "jsonc";
 
 export type FileIconId =
   | "css"
