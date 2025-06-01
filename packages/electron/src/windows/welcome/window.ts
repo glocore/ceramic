@@ -1,11 +1,7 @@
 import { invariant } from "@ceramic/common";
 import { BrowserWindow, dialog, ipcMain, Menu } from "electron";
 import path from "node:path";
-import url from "node:url";
 import { closeWindow, windows } from "src/window";
-
-declare const RENDERER_VITE_DEV_SERVER_URL: string;
-declare const RENDERER_VITE_NAME: string;
 
 export const createWelcomeWindow = () => {
   const welcomeWindow = new BrowserWindow({
@@ -27,21 +23,7 @@ export const createWelcomeWindow = () => {
 
   windows.set("welcome", welcomeWindow);
 
-  // and load the index.html of the app.
-  if (RENDERER_VITE_DEV_SERVER_URL) {
-    welcomeWindow.loadURL(`${RENDERER_VITE_DEV_SERVER_URL}/welcome`);
-  } else {
-    welcomeWindow.loadURL(
-      url.format({
-        protocol: "file",
-        slashes: true,
-        pathname: path.join(
-          __dirname,
-          `../renderer/${RENDERER_VITE_NAME}/index.html`
-        ),
-      })
-    );
-  }
+  welcomeWindow.loadURL("http://localhost:5173/welcome");
 
   // prevent the html <title> from updating the window title (shown in the window picker for example)
   welcomeWindow.on("page-title-updated", (e) => e.preventDefault());

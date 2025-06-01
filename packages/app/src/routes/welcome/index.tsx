@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { db } from "src/db";
 import { tinykeys } from "src/tinykeys";
 import { cn } from "src/utils";
-import pkg from "../../../../package.json";
+import pkg from "../../../../../package.json";
 import icon from "/icon.png";
 import { getPrintablePath } from "src/path";
 

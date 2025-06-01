@@ -1,10 +1,10 @@
 {
-  "name": "@ceramic-studio/app",
+  "name": "@ceramic-studio/electron",
   "productName": "Ceramic Studio",
   "version": "0.0.2",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "dev": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -26,6 +26,7 @@
     "@electron-forge/plugin-fuses": "^7.8.0",
     "@electron-forge/plugin-vite": "^7.8.0",
     "@electron-forge/publisher-github": "^7.8.0",
+    "@electron-forge/shared-types": "^7.8.1",
     "@electron/fuses": "^1.8.0",
     "@types/electron-squirrel-startup": "^1.0.2",
     "electron": "36.1.0",
@@ -33,7 +34,7 @@
     "ts-node": "^10.0.0",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "catalog:"
   },
   "dependencies": {
     "@ceramic/common": "workspace:*",

@@ -1,6 +1,5 @@
 packages:
   - "packages/*"
-  - "packages/studio/renderer"
   - "vendor/*"
 
 onlyBuiltDependencies:
@@ -13,3 +12,4 @@ catalog:
   vitest: "3.1.1"
   typescript: "5.8.3"
   "@tanstack/react-router": "1.116.0"
+  "vite-tsconfig-paths": "5.1.4"
