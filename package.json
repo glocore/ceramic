@@ -10,7 +10,10 @@
   "pnpm": {
     "overrides": {
       "@ceramic/create-ceramic-app": "link:packages/create-ceramic-app"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
   },
   "dependencies": {
     "@ceramic/create-ceramic-app": "link:packages/create-ceramic-app"

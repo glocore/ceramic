@@ -6,7 +6,6 @@ import {
 } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
-import { jsonc } from "@shopify/lang-jsonc";
 import {
   bracketMatching,
   defaultHighlightStyle,
@@ -32,11 +31,12 @@ import {
   rectangularSelection,
   ViewPlugin,
 } from "@codemirror/view";
+import { jsonc } from "@shopify/lang-jsonc";
 import React, { useEffect, useRef, useState } from "react";
-import "./Editor.css";
-import { cn } from "src/utils";
-import { Lang } from "src/types";
 import { langForFile } from "src/lang";
+import { Lang } from "src/types";
+import { cn } from "src/utils";
+import "./Editor.css";
 
 type EditorProps = React.ComponentProps<"div"> & {
   filePath?: string;
@@ -243,8 +243,6 @@ const themeExtension = EditorView.theme({
     },
 
   ".cm-selectionMatch": {
-    borderRadius: "0.25rem",
-    paddingBlock: "0.125rem",
     backgroundColor:
       "color-mix(in oklab, var(--color-neutral-500) 15%, transparent)",
   },
